@@ -8,3 +8,5 @@ test_tree.pretty_print
 
 test_tree.insert(88)
 test_tree.pretty_print
+
+puts test_tree.find(80)

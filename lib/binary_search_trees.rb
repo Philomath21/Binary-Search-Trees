@@ -10,7 +10,7 @@ class Node
   end
 
   def to_s
-    "#{data} (left = #{left}, right = #{right})"
+    "#{data} (left = #{left&.data}, right = #{right&.data})"
   end
 end
 
