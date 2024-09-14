@@ -79,20 +79,14 @@ class Tree
     info_a = find_condition(element, p_node) { |node| node.data == element }
     node, p_node, side = info_a
 
-    case
-    when node.left.nil? then node = node.right
-    when node.right.nil? then node = node.left
-    else # both children are present
+    if node.left && node.right # both children are present
       new_info_a = find_condition(element, node.right) { |node| node.nil? } # rubocop:disable Style/SymbolProc
       succ_node = new_info_a[1]
       node.data = succ_node.data
       delete(succ_node.data, node)
-      return
-    end
-
-    case side
-    when 'left' then p_node.left = node
-    when 'right' then p_node.right = node
+    else
+      node = node.left.nil? ? node.right : node.left
+      side == 'left' ? p_node.left = node : p_node.right = node
     end
   end
 end

@@ -14,8 +14,8 @@ puts test_tree.find(80)
 test_tree.delete(78)
 test_tree.pretty_print
 
-test_tree.delete(80)
-test_tree.pretty_print
+# test_tree.delete(80)
+# test_tree.pretty_print
 
-test_tree.delete(8)
-test_tree.pretty_print
+# test_tree.delete(8)
+# test_tree.pretty_print
