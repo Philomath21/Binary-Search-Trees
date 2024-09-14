@@ -71,12 +71,18 @@ class Tree
   end
 
   def delete(c_data, node = root)
-    node, p_node, side = find_c(c_data)
+    node, p_node, side = find_c(c_data, node)
 
     if node.nil?
       'Data does not exist in binary tree'
     elsif node.left && node.right
-      a = 1
+      p_sac_node, sac_node = node, node.right                 # rubocop:disable Style/ParallelAssignment
+      loop do
+        break if sac_node.left.nil?                           # rubocop:disable Layout/EmptyLineAfterGuardClause
+        p_sac_node, sac_node = sac_node, sac_node.left        # rubocop:disable Style/ParallelAssignment
+      end
+      node.data = sac_node.data
+      delete(sac_node.data, p_sac_node)
     else
       case side
       when -1 then p_node.left = node.left || node.right
