@@ -42,63 +42,57 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
-  # Complimentary method for use in other methods
-  # method goes into the depth of the tree until node is nil or same as passed element
-  # returns node, its parent node and side on which node is relative to parent node
-  def find_condition(element, p_node = root)
+  def find(c_data)
+    node = root
     loop do
-      side = element < p_node.data ? 'left' : 'right'
-      node = side == 'left' ? p_node.left : p_node.right
-      return [node, p_node, side] if node.nil? || node.data == element
+      return 'Not found' if node.nil?
 
-      p_node = node
-    end
-  end
-  # CODE FOR REUSING:
-  # node, p_node, side = find_condition(element)
-
-  def insert(element)
-    p_node, side = find_condition(element)[1..]
-
-    case side
-    when 'left' then p_node.left = Node.new(element)
-    when 'right' then p_node.right = Node.new(element)
+      case c_data <=> node.data
+      when -1 then node = node.left
+      when 1 then node = node.right
+      when 0 then return node
+      end
     end
   end
 
-  def find(element)
-    node = find_condition(element)[0]
+  def insert(c_data)
+    node = root
+    p_node = nil
+    side = nil
+    loop do
+      if node.nil?
+        node = Node.new(c_data)
+        side == -1 ? p_node.left = node : p_node.right = node
+        return node
+      end
 
-    if node.nil?
-      puts 'element not found in binary tree'
+      side = c_data <=> node.data
+      case side
+      when -1 then p_node, node = node, node.left # rubocop:disable Style/ParallelAssignment
+      when 1 then p_node, node = node,  node.right # rubocop:disable Style/ParallelAssignment
+      when 0 then return 'Data already exists in tree'
+    end
+  end
+
+  def delete(c_data, node = root)
+    while true
+      return 'Not found' if node.nil?
+
+      side = c_data <=> node.data
+      case side
+      when -1 then p_node, node = node, node.left # rubocop:disable Style/ParallelAssignment
+      when 1 then p_node, node = node,  node.right # rubocop:disable Style/ParallelAssignment
+      when 0 then break
+      end
+    end
+
+    if node.left && node.right
+      true
     else
-      node
-    end
-  end
-
-  def delete(element, p_node = root)
-    node, p_node, side = find_condition(element, p_node)
-
-    if node.nil?
-      # element not found in binary tree
-      puts 'element not found in binary tree'
-
-    elsif node.left && node.right
-      # node has two children
-      # Finding next lowest data that will replace the data in current node after deletion
-      # This data will be found at deepest left child of right child
-      new_element = find_condition(element, node.right)[1].data
-
-      # replacing deleted data with next lowest data
-      node.data = new_element
-
-      # deleting old node of next lowest data
-      delete(new_element, node)
-
-    else
-      # node has one or no child, deleting node by replacing it with child or nil
-      next_node = node.left.nil? ? node.right : node.left
-      side == 'left' ? p_node.left = next_node : p_node.right = next_node
+      case side
+      when -1 then p_node.left = node.left ? node.left : node.right
+      when 1 then p_node.right = node.left ? node.left : node.right
+      end
     end
   end
 end
