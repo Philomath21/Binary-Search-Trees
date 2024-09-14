@@ -42,56 +42,45 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
-  def find(c_data)
-    node = root
+  def find_c(c_data, node = root, p_node = nil, side = nil)
     loop do
-      return 'Not found' if node.nil?
-
-      case c_data <=> node.data
-      when -1 then node = node.left
-      when 1 then node = node.right
-      when 0 then return node
-      end
-    end
-  end
-
-  def insert(c_data)
-    node = root
-    p_node = nil
-    side = nil
-    loop do
-      if node.nil?
-        node = Node.new(c_data)
-        side == -1 ? p_node.left = node : p_node.right = node
-        return node
-      end
+      return [node, p_node, side] if node.nil?
 
       side = c_data <=> node.data
       case side
       when -1 then p_node, node = node, node.left # rubocop:disable Style/ParallelAssignment
       when 1 then p_node, node = node,  node.right # rubocop:disable Style/ParallelAssignment
-      when 0 then return 'Data already exists in tree'
+      when 0 then return [node, p_node, side]
+      end
+    end
+  end
+  # node, p_node, side = find_c(c_data)
+
+  def find(c_data)
+    node = find_c(c_data)[0]
+    node.nil? ? 'Data does not exist in binary tree' : node
+  end
+
+  def insert(c_data)
+    p_node, side = find_c(c_data)[1, 2]
+    case side
+    when -1 then p_node.left = Node.new(c_data)
+    when 1 then p_node.right = Node.new(c_data)
+    when 0 then 'Data already exists in tree'
     end
   end
 
   def delete(c_data, node = root)
-    while true
-      return 'Not found' if node.nil?
+    node, p_node, side = find_c(c_data)
 
-      side = c_data <=> node.data
-      case side
-      when -1 then p_node, node = node, node.left # rubocop:disable Style/ParallelAssignment
-      when 1 then p_node, node = node,  node.right # rubocop:disable Style/ParallelAssignment
-      when 0 then break
-      end
-    end
-
-    if node.left && node.right
-      true
+    if node.nil?
+      'Data does not exist in binary tree'
+    elsif node.left && node.right
+      a = 1
     else
       case side
-      when -1 then p_node.left = node.left ? node.left : node.right
-      when 1 then p_node.right = node.left ? node.left : node.right
+      when -1 then p_node.left = node.left || node.right
+      when 1 then p_node.right = node.left || node.right
       end
     end
   end
