@@ -62,7 +62,12 @@ class Tree
   def insert(element)
     info_a = find_condition(element) { |node| node.nil? } # rubocop:disable Style/SymbolProc
     node, p_node, side = info_a
-    p_node.left = Node.new(element) if node.nil?
+    node = Node.new(element) if node.nil?
+
+    case side
+    when 'left' then p_node.left = node
+    when 'right' then p_node.right = node
+    end
   end
 
   def find(element)
