@@ -48,13 +48,13 @@ class Tree
       return [node, p_node, side] if node.nil?
 
       case c_data <=> node.data
+      when 0 then return [node, p_node, side]
       when -1 then p_node = node
                    node = node.left
                    side = -1
       when 1 then p_node = node
                   node = node.right
                   side = 1
-      when 0 then return [node, p_node, side]
       end
     end
   end
@@ -62,16 +62,24 @@ class Tree
 
   def find(c_data)
     node = find_c(c_data)[0]
-    node.nil? ? "#{c_data} does not exist in binary tree" : node
+
+    if node.nil?
+      "#{c_data} does not exist in binary tree"
+    else
+      node
+    end
   end
 
   def insert(c_data)
     node, p_node, side = find_c(c_data)
-    return puts "#{c_data} already exists in tree" unless node.nil?
 
-    case side
-    when -1 then p_node.left = Node.new(c_data)
-    when 1 then p_node.right = Node.new(c_data)
+    if node.nil?
+      case side
+      when -1 then p_node.left = Node.new(c_data)
+      when 1 then p_node.right = Node.new(c_data)
+      end
+    else
+      puts "#{c_data} already exists in tree"
     end
   end
 
