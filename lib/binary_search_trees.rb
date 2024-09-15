@@ -40,16 +40,20 @@ class Tree
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+    puts ' ' if node == root
   end
 
   def find_c(c_data, node = root, p_node = nil, side = nil)
     loop do
       return [node, p_node, side] if node.nil?
 
-      side = c_data <=> node.data
-      case side
-      when -1 then p_node, node = node, node.left # rubocop:disable Style/ParallelAssignment
-      when 1 then p_node, node = node,  node.right # rubocop:disable Style/ParallelAssignment
+      case c_data <=> node.data
+      when -1 then p_node = node
+                   node = node.left
+                   side = -1
+      when 1 then p_node = node
+                  node = node.right
+                  side = 1
       when 0 then return [node, p_node, side]
       end
     end
@@ -58,33 +62,36 @@ class Tree
 
   def find(c_data)
     node = find_c(c_data)[0]
-    node.nil? ? 'Data does not exist in binary tree' : node
+    node.nil? ? "#{c_data} does not exist in binary tree" : node
   end
 
   def insert(c_data)
-    p_node, side = find_c(c_data)[1, 2]
+    node, p_node, side = find_c(c_data)
+    return puts "#{c_data} already exists in tree" unless node.nil?
+
     case side
     when -1 then p_node.left = Node.new(c_data)
     when 1 then p_node.right = Node.new(c_data)
-    when 0 then 'Data already exists in tree'
     end
   end
 
   def delete(c_data, root_node = root)
-    node, p_node = find_c(c_data, root_node)[0, 1]
+    node, p_node, side = find_c(c_data, root_node)
 
     if node.nil?
       puts 'Data does not exist in binary tree'
     elsif node.left && node.right
-      p_sac_node, sac_node = node, node.right                 # rubocop:disable Style/ParallelAssignment
+      p_sac_node = node
+      sac_node = node.right
       loop do
-        break if sac_node.left.nil?                           # rubocop:disable Layout/EmptyLineAfterGuardClause
-        p_sac_node, sac_node = sac_node, sac_node.left        # rubocop:disable Style/ParallelAssignment
+        break if sac_node.left.nil?
+
+        p_sac_node = sac_node
+        sac_node = sac_node.left
       end
       node.data = sac_node.data
       delete(sac_node.data, p_sac_node)
     else
-      side = p_node.left == node ? -1 : 1
       case side
       when -1 then p_node.left = node.left || node.right
       when 1 then p_node.right = node.left || node.right
