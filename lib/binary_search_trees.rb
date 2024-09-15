@@ -107,6 +107,8 @@ class Tree
     end
   end
 
+  # Breadth first traversals -
+  # level_order : left to right on each level, starting from top (root)
   def level_order(queue = [root], lev_ord_a = [], &block)
     loop do
       node = queue.pop
@@ -116,5 +118,34 @@ class Tree
       lev_ord_a.push block_given? ? block.call(node) : node.data
       return lev_ord_a if queue.empty?
     end
+  end
+
+  # Depth first traversals - inorder, preorder, postorder
+
+  # inorder : left, root, right
+  def inorder(node = root, order_a = [], &block)
+    order_a += inorder(node.left) if node.left
+    order_a.push block_given? ? block.call(node, order_a) : node.data
+    order_a += inorder(node.right) if node.right
+
+    order_a
+  end
+
+  # preorder : root, left, right
+  def preorder(node = root, order_a = [], &block)
+    order_a.push block_given? ? block.call(node, order_a) : node.data
+    order_a += preorder(node.left) if node.left
+    order_a += preorder(node.right) if node.right
+
+    order_a
+  end
+
+  # postorder : left, right, root
+  def postorder(node = root, order_a = [], &block)
+    order_a += postorder(node.left) if node.left
+    order_a += postorder(node.right) if node.right
+    order_a.push block_given? ? block.call(node, order_a) : node.data
+
+    order_a
   end
 end
