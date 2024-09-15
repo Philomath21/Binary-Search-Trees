@@ -44,7 +44,7 @@ class Tree
     puts ' ' if node == root
   end
 
-  def find_c(c_data, node = root, p_node = nil, side = nil)
+  def find_comp(c_data, node = root, p_node = nil, side = nil)
     loop do
       return [node, p_node, side] if node.nil?
 
@@ -59,10 +59,10 @@ class Tree
       end
     end
   end
-  # node, p_node, side = find_c(c_data)
+  # node, p_node, side = find_comp(c_data)
 
   def find(c_data)
-    node = find_c(c_data)[0]
+    node = find_comp(c_data)[0]
 
     if node.nil?
       "#{c_data} does not exist in binary tree"
@@ -72,7 +72,7 @@ class Tree
   end
 
   def insert(c_data)
-    node, p_node, side = find_c(c_data)
+    node, p_node, side = find_comp(c_data)
 
     if node.nil?
       case side
@@ -85,7 +85,7 @@ class Tree
   end
 
   def delete(c_data, root_node = root)
-    node, p_node, side = find_c(c_data, root_node)
+    node, p_node, side = find_comp(c_data, root_node)
 
     if node.nil?
       puts "#{c_data} does not exist in binary tree"
