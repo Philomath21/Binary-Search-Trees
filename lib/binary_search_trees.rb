@@ -107,11 +107,14 @@ class Tree
     end
   end
 
-  def level_order(node = root, lo_a = [], &block)
-    level_order(node.left, lo_a) if node.left
-    lo_a.push block_given? ? block.call(node) : node.data
-    level_order(node.right, lo_a) if node.right
+  def level_order(queue = [root], lev_ord_a = [], &block)
+    loop do
+      node = queue.pop
+      queue.unshift node.left if node.left
+      queue.unshift node.right if node.right
 
-    lo_a
+      lev_ord_a.push block_given? ? block.call(node) : node.data
+      return lev_ord_a if queue.empty?
+    end
   end
 end
