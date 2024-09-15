@@ -6,8 +6,17 @@ p array
 test_tree = Tree.new(array)
 test_tree.pretty_print
 
+puts test_tree.balanced?
+
 test_tree.insert(88)
 test_tree.pretty_print
+puts test_tree.balanced?
+
+test_tree.insert(89)
+test_tree.insert(90)
+test_tree.insert(91)
+test_tree.pretty_print
+puts test_tree.balanced?
 
 # puts test_tree.find(80)
 # puts test_tree.find(38)

@@ -149,23 +149,35 @@ class Tree
     order_a
   end
 
-  def depth(c_node, node = root, count = 0)
+  def depth(c_node, node = root, depth_count = 0)
     loop do
       return puts "#{c_node.data} does not exist in binary tree" if node.nil?
 
       case c_node.data <=> node.data
-      when 0 then return count
+      when 0 then return depth_count
       when -1 then node = node.left
       when 1 then node = node.right
       end
-      count += 1
+      depth_count += 1
     end
   end
 
-  def height(c_node, count = 0)
-    count_l = c_node.left ? height(c_node.left, count + 1) : count
-    count_r = c_node.right ? height(c_node.right, count + 1) : count
+  def height(node, height_count = 0)
+    height_count_l = node.left ? height(node.left, height_count + 1) : height_count
+    height_count_r = node.right ? height(node.right, height_count + 1) : height_count
 
-    [count_l, count_r].max
+    [height_count_l, height_count_r].max
+  end
+
+  def balanced?(node = root, height_count = 0)
+    height_count_l = node.left ? height(node.left, height_count + 1) : height_count
+    height_count_r = node.right ? height(node.right, height_count + 1) : height_count
+
+    height_a = [height_count_l, height_count_r]
+    return false if height_a.include? false
+    return false if height_a.max - height_a.min > 1
+    return true if node == root
+
+    height_a.max
   end
 end
