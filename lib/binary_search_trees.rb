@@ -87,7 +87,7 @@ class Tree
     node, p_node, side = find_c(c_data, root_node)
 
     if node.nil?
-      puts 'Data does not exist in binary tree'
+      puts "#{c_data} does not exist in binary tree"
     elsif node.left && node.right
       p_sac_node = node
       sac_node = node.right
@@ -147,5 +147,25 @@ class Tree
     order_a.push block_given? ? block.call(node, order_a) : node.data
 
     order_a
+  end
+
+  def depth(c_node, node = root, count = 0)
+    loop do
+      return puts "#{c_node.data} does not exist in binary tree" if node.nil?
+
+      case c_node.data <=> node.data
+      when 0 then return count
+      when -1 then node = node.left
+      when 1 then node = node.right
+      end
+      count += 1
+    end
+  end
+
+  def height(c_node, count = 0)
+    count_l = c_node.left ? height(c_node.left, count + 1) : count
+    count_r = c_node.right ? height(c_node.right, count + 1) : count
+
+    [count_l, count_r].max
   end
 end

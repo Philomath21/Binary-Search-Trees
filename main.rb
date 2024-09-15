@@ -22,7 +22,14 @@ test_tree.pretty_print
 # test_tree.delete(8)
 # test_tree.pretty_print
 
-p test_tree.level_order
-p test_tree.inorder
-p test_tree.preorder
-p test_tree.postorder
+# puts test_tree.depth(test_tree.find(80))
+# puts test_tree.depth(test_tree.find(38))
+
+# p test_tree.height(test_tree.find(80))
+# p test_tree.height(test_tree.find(38))
+# p test_tree.height(test_tree.find(6))
+
+# p test_tree.level_order
+# p test_tree.inorder
+# p test_tree.preorder
+# p test_tree.postorder
