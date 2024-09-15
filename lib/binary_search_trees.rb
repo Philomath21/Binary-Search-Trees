@@ -106,4 +106,12 @@ class Tree
       end
     end
   end
+
+  def level_order(node = root, lo_a = [], &block)
+    level_order(node.left, lo_a) if node.left
+    lo_a.push block_given? ? block.call(node) : node.data
+    level_order(node.right, lo_a) if node.right
+
+    lo_a
+  end
 end

@@ -9,15 +9,17 @@ test_tree.pretty_print
 test_tree.insert(88)
 test_tree.pretty_print
 
-puts test_tree.find(80)
-puts test_tree.find(38)
-puts test_tree.find(8)
+# puts test_tree.find(80)
+# puts test_tree.find(38)
+# puts test_tree.find(8)
 
-test_tree.delete(78)
-test_tree.pretty_print
+# test_tree.delete(78)
+# test_tree.pretty_print
 
-test_tree.delete(80)
-test_tree.pretty_print
+# test_tree.delete(80)
+# test_tree.pretty_print
 
-test_tree.delete(8)
-test_tree.pretty_print
+# test_tree.delete(8)
+# test_tree.pretty_print
+
+p test_tree.level_order
