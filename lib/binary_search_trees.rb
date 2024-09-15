@@ -15,22 +15,20 @@ class Node
 end
 
 class Tree
-  attr_accessor :array, :root
+  attr_accessor :root
 
   def initialize(array)
-    self.array = array
-    self.root = build_tree(array)
+    self.root = build_tree(array.sort)
   end
 
   # Method builds balanced binary tree from passed array, returns its root node
   def build_tree(sub_a)
-    sorted_a = sub_a.sort
-    mid_index = sorted_a.length / 2
-    node = Node.new(sorted_a[mid_index])
+    mid_index = sub_a.length / 2
+    node = Node.new(sub_a[mid_index])
 
-    if sorted_a.length > 1
-      node.left = build_tree(sorted_a[..mid_index - 1])
-      node.right = build_tree(sorted_a[mid_index + 1..])
+    if sub_a.length > 1
+      node.left = build_tree(sub_a[..mid_index - 1])
+      node.right = build_tree(sub_a[mid_index + 1..])
     end
     node
   end
@@ -179,5 +177,9 @@ class Tree
     return true if node == root
 
     height_a.max
+  end
+
+  def rebalance
+    self.root = build_tree(inorder)
   end
 end

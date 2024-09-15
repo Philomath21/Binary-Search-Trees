@@ -18,6 +18,9 @@ test_tree.insert(91)
 test_tree.pretty_print
 puts test_tree.balanced?
 
+test_tree.rebalance
+test_tree.pretty_print
+
 # puts test_tree.find(80)
 # puts test_tree.find(38)
 # puts test_tree.find(8)
