@@ -1,3 +1,4 @@
+# Node class to create node objects for tree
 class Node
   include Comparable
 
@@ -14,6 +15,7 @@ class Node
   end
 end
 
+# Tree object has root node & built in methods
 class Tree
   attr_accessor :root
 
@@ -23,12 +25,13 @@ class Tree
 
   # Method builds balanced binary tree from passed array, returns its root node
   def build_tree(sub_a)
-    mid_index = sub_a.length / 2
-    node = Node.new(sub_a[mid_index])
+    mid_i = sub_a.length / 2
+    return if sub_a[mid_i].nil?
 
+    node = Node.new(sub_a[mid_i])
     if sub_a.length > 1
-      node.left = build_tree(sub_a[..mid_index - 1])
-      node.right = build_tree(sub_a[mid_index + 1..])
+      node.left = build_tree(sub_a[..mid_i - 1])
+      node.right = build_tree(sub_a[mid_i + 1..])
     end
     node
   end
@@ -160,23 +163,27 @@ class Tree
     end
   end
 
-  def height(node, height_count = 0)
-    height_count_l = node.left ? height(node.left, height_count + 1) : height_count
-    height_count_r = node.right ? height(node.right, height_count + 1) : height_count
+  # Complementary ethod for #height & #balanced?
+  def height_comp(node = root)
+    h_count_left = node.left ? 1 + height_comp(node.left) : 0
+    h_count_right = node.right ? 1 + height_comp(node.right) : 0
 
-    [height_count_l, height_count_r].max
-  end
-
-  def balanced?(node = root, height_count = 0)
-    height_count_l = node.left ? height(node.left, height_count + 1) : height_count
-    height_count_r = node.right ? height(node.right, height_count + 1) : height_count
-
-    height_a = [height_count_l, height_count_r]
-    return false if height_a.include? false
-    return false if height_a.max - height_a.min > 1
-    return true if node == root
+    height_a = [h_count_left, h_count_right]
+    if block_given?
+      return false if height_a.include? false
+      return false if height_a.max - height_a.min > 1
+      return true if node == root
+    end
 
     height_a.max
+  end
+
+  def height(node)
+    height_comp(node)
+  end
+
+  def balanced?
+    height_comp { 'Check balance' }
   end
 
   def rebalance
